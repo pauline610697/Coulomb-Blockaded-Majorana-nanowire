@@ -1,45 +1,5 @@
 %% Version 56-B-15: This code is to calculate dI/dV false plot/peak spacings as a function of ng and Vz for the multi-level system.
-%  Using Landauer Formula. Phys. Rev. Lett. 68.2512, Eq.(13)
-%  Superconducting gap change with the magnetic field
-%  Include self-energy
-%  Vectorization
-%  Use Jay's simplification: only need to sum over changed orbitals p.
-%  Deal with the degeneracy issue. => Difference between v11 and v12.
-%  Find the root of the determinant(H_nw + selfE - \omega)==0.
-% => Count the number of negative eigenstates, and find the difference \omega points.
-% Include metallic part energy levels.
-% Use LDOS to find WF
-% Normalize the LDOS by using "LDOS_se_v2.m" ==> Difference from v14a
-% Separate ls for electron & hole parts (use "LDOS_se_v3.m") ==> Difference from v14b
-% Include states above SC gap ==> Difference from v14c
-% Use SC bulk gap DOS above SC gap ==> Difference from v14d
-% eigen-energy is modified with 1st-order perturbation from the self-energy ==> Difference from v21.
-% Deal with the degenerate wave-function ==> Difference from v22. (See 20191227 Jay's notes.)
-% Use the exact expression for the density matrix in Jay's notes ==> Use dosH_se_v7.m ==> Difference from v25.
-% Only count "distinct" energy levels to do the degeneracy. ==> Difference from v26.
-% Find the eigenvalues with threshold 0.01. ==> Difference from v27
-% Combination of v28 and v20. ==> Difference from v28
-% Group and ensemble average the DOS peaks ==> Difference from v29
-%  Use simplified F factor (cancellation with Z) ==> Difference from v31
-% Do not fix the number of energy levels to be V_metal_N ==> Difference from v32
-% Count the number of states with energy less than the temperature. ==> Difference from v33
-% 1. rho_w -> rho_w(k,n) ==> Difference from v34
-% 2. above the gap: density matrix multiplying (delta E_n) firstly ==> Difference from v34
-% 3. Fix the n-dependent degneracy issue ==> Difference from v34
-% Get rid of first zero energy; get rid of the case WITHOUT bound state ==> Difference from v38
-% Different approach for picking the energy level above the gap ==> Difference from v39
-% Same method as v40, but with QD
-% Not saving so many variables ==> Difference from v42
-% Add Jay's Pfaffian factor for zero-crossing ==> Difference from v43
-% Interchange n with (1-n), Q with -Q, and Gamma with Lambda. ==> Difference from v45
-% Consider MORE THAN the first energy level ==> Difference from v49
-% Add parity when choosing the wave-function
-% Rebuild zero-energy degenerate states from Majorana basis ==> Difference from v48 and v48b
-% Unify F_p(n,Q) ==> Difference from v50
-% Fix the prod(tanh(s)) issue by taking log(lambda) ==> Difference from v51
-% Rewrite prod(tanh(s)) into lambda in Z to fix (1-lambda)=1 issue ==> Difference from v52
-% Two QDs ==> Difference from v51-v53
-% Soft gap modification, treat soft-gap region the same as above Vc ==> Difference from v55
+%  Soft gap is included in the topological regime.
 
 clear;
 tic;
@@ -130,9 +90,6 @@ parfor k = 1:C % VzNumber
     n1 = 0;
     while tempE < V_metal
         n1 = n1+1;
-        %disp(['metal state = ',num2str(n1)]);
-        
-        %rho_w = dosH_se_v14(t,Delta1,N_tot,alpha,mu,VD1,VD2,N_dot,Nbarrier,Ebarrier,Vz,lambda,tempE,s);
         rho_w = dosH_se_v16(t,Delta1,Delta2,N_tot,alpha,mu,VD1,VD2,N_dot,Nbarrier,Ebarrier,Vz,lambda,tempE,s);
         [dege_WF,lambda_m] = eigs(rho_w,4.*N_tot,'LM');
         lambda_m = diag(lambda_m);
