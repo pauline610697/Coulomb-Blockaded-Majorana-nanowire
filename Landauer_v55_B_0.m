@@ -133,13 +133,7 @@ for k = 1:C % C; VzNumber
                
                Q_0(k) = FermionParityBdG(real(Hami + 10.*H_BdG));
                parity = (1-Q_0(k))./2;
-               Parity(k) = parity;
-               
-               %if d==1
-               %    dege_WF = Npsi_1;
-               %else
-               %    dege_WF = [Npsi_1 dege_WF(:,2:end)];
-               %end
+               Parity(k) = parity;               
            end
                               
            dege_WF = prefactor.*dege_WF;                      
