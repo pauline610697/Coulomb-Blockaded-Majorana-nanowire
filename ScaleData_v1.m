@@ -8,11 +8,6 @@ N_odd = 21;
 ngRange_even = (N_even - 1./2) - (N_even - ngRange - 1./2)./Factor; 
 ngRange_odd = (N_odd - 1./2) - (N_odd - ngRange - 1./2)./Factor; 
 
-%even_index_min = find(abs(ngRange_even-19)<=1e-4);
-%even_index_max = find(abs(ngRange_even-21)<=1e-4);
-%odd_index_min = find(abs(ngRange_odd-19)<=1e-4);
-%odd_index_max = find(abs(ngRange_odd-21)<=1e-4);
-
 [~,even_index_min] = min(abs(ngRange_even-19));
 [~,even_index_max] = min(abs(ngRange_even-21));
 [~,odd_index_min] = min(abs(ngRange_odd-19));
